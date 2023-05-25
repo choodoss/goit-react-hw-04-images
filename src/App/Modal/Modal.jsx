@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 export default function Modal({ children, hendlerCloseImage }) {
 
     const hendlerShutDown = e => {
-        console.log(e)
         if (e.key === 'Escape' || e.target === e.currentTarget) {
             hendlerCloseImage();
         }

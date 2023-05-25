@@ -25,13 +25,14 @@ export default function App() {
   const [largeImg, setLargeImg] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [secondRespons, setSecondRespons] = useState(false);
 
   useEffect(() => {
     searchImages({ name, page, per_page, category, colors, orientation, image_type })
       .then(res => {
         return setResponse(res.hits)
       })
-  }, [submitted]);
+  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -39,8 +40,9 @@ export default function App() {
         .then(res => {
           if (res.total !== 0) {
             setSubmitted(true)
-            setResponse([...response, ...res.hits])
+            setResponse(res.hits)
             setTotal(res.totalHits)
+            setSecondRespons(true)
             setLoading(false)
           } else {
             setLoading({ loading: false });
@@ -48,10 +50,19 @@ export default function App() {
           }
         })
     }
-  }, [name, page, per_page, category, colors, orientation, image_type, loading, response]);
+  }, [name, category, colors, orientation, image_type]);
+
+  useEffect(() => {
+    if (loading && secondRespons) {
+      searchImages({ name, page, per_page, category, colors, orientation, image_type })
+        .then(res => {
+          setResponse([...response, ...res.hits])
+          setLoading(false)
+        })
+    }
+  }, [page, per_page]);
 
   const hendleSubmitChange = ({ searchName, category, colors, orientation, image_type }) => {
-    setResponse([])
     if (searchName === undefined) {
       if (category) {
         setName('')
@@ -72,6 +83,7 @@ export default function App() {
       }
     }
     else {
+      setSecondRespons(false)
       setPerPage(16)
       setName(searchName)
       setLoading(true)
@@ -80,6 +92,7 @@ export default function App() {
       setoOrientation("all")
       setImageType("all")
       setPage(1)
+
     }
   }
 
