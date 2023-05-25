@@ -6,6 +6,7 @@ list-style: none;
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    margin-bottom: 40px;
 `
 export const ImgItem = styled.li`
     height: 230px;
