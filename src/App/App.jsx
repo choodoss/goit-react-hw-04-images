@@ -43,12 +43,10 @@ export default function App() {
             setResponse(res.hits)
             setTotal(res.totalHits)
             setSecondRespons(true)
-            setLoading(false)
           } else {
-            setLoading({ loading: false });
             toast.error("Картинки за вашим запитом відсутні");
           }
-        })
+        }).finally(setLoading(false))
     }
   }, [name, category, colors, orientation, image_type]);
 
@@ -58,7 +56,7 @@ export default function App() {
         .then(res => {
           setResponse([...response, ...res.hits])
           setLoading(false)
-        })
+        }).finally(setLoading(false))
     }
   }, [page, per_page]);
 
