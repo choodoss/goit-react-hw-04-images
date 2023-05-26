@@ -8,7 +8,6 @@ import ImagesList from './ImagesList/ImagesList';
 import { Container, Img } from './App.styled';
 import LoadBtn from './LoadBtn/LoadBtn';
 import { ColorRing } from 'react-loader-spinner'
-import Modal from './Modal/Modal';
 import { createPortal } from 'react-dom';
 
 export default function App() {
@@ -22,8 +21,6 @@ export default function App() {
   const [response, setResponse] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [total, setTotal] = useState(0);
-  const [largeImg, setLargeImg] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [secondRespons, setSecondRespons] = useState(false);
 
@@ -90,22 +87,12 @@ export default function App() {
       setoOrientation("all")
       setImageType("all")
       setPage(1)
-
     }
-  }
-
-  const hendleOpenImage = ({ currentTarget: { dataset: { img } } }) => {
-    setLargeImg(img)
-    setModalOpen(true)
   }
 
   const hendlerLoadMore = () => {
     setPage(prePage => prePage + 1)
     setLoading(true)
-  }
-
-  const hendleCloseImage = () => {
-    setModalOpen(!modalOpen)
   }
 
   const loader = createPortal(
@@ -124,10 +111,9 @@ export default function App() {
     <Container>
       {response && !submitted ? <BackgroundContainer response={response} /> : null}
       <SearchForm onSubmit={hendleSubmitChange} submitted={submitted} />
-      {response && submitted ? <ImagesList response={response} hendlerOpenImage={hendleOpenImage} /> : null}
+      {response && submitted ? <ImagesList response={response} /> : null}
       {(total / page) > per_page && response && submitted ? <LoadBtn hendlerLoadMore={hendlerLoadMore} /> : null}
       {loader}
-      {modalOpen && <Modal hendlerCloseImage={hendleCloseImage}><Img src={largeImg} /></Modal>}
       <ToastContainer
         position="top-center"
         autoClose={3000}

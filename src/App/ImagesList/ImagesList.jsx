@@ -1,9 +1,12 @@
-import { ImgList, ImgItem, Img } from './ImagesList.styled'
+import { ImgList } from './ImagesList.styled'
+import ImageItem from './ImageItem/ImageItem';
 
-export default function ImagesList({ response, hendlerOpenImage }) {
+
+export default function ImagesList({ response }) {
     const imagesList =
         <ImgList>
-            {response.map(img => <ImgItem key={img.id}><Img onClick={hendlerOpenImage} src={img.webformatURL} alt={img.tags} data-img={img.largeImageURL} /></ImgItem>)}
+            {response.map(img => <ImageItem key={img.id} webformatURL={img.webformatURL} tags={img.tags} largeImageURL={img.largeImageURL} />)}
         </ImgList>
     return imagesList;
 }
+
