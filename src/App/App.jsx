@@ -5,7 +5,7 @@ import BackgroundContainer from './BackgroundContainer/BackgroundContainer';
 import { searchImages } from './fetchDefault/fetchDefault';
 import SearchForm from './SearchForm/SearchForm';
 import ImagesList from './ImagesList/ImagesList';
-import { Container, Img } from './App.styled';
+import { Container } from './App.styled';
 import LoadBtn from './LoadBtn/LoadBtn';
 import { ColorRing } from 'react-loader-spinner'
 import { createPortal } from 'react-dom';
@@ -22,7 +22,6 @@ export default function App() {
   const [submitted, setSubmitted] = useState(false);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [secondRespons, setSecondRespons] = useState(false);
 
   useEffect(() => {
     searchImages({ name, page, per_page, category, colors, orientation, image_type })
@@ -37,25 +36,18 @@ export default function App() {
         .then(res => {
           if (res.total !== 0) {
             setSubmitted(true)
-            setResponse(res.hits)
+            if (page !== 1) {
+              setResponse([...response, ...res.hits])
+            } else {
+              setResponse(res.hits)
+            }
             setTotal(res.totalHits)
-            setSecondRespons(true)
           } else {
             toast.error("Картинки за вашим запитом відсутні");
           }
         }).finally(setLoading(false))
     }
-  }, [name, category, colors, orientation, image_type]);
-
-  useEffect(() => {
-    if (loading && secondRespons) {
-      searchImages({ name, page, per_page, category, colors, orientation, image_type })
-        .then(res => {
-          setResponse([...response, ...res.hits])
-          setLoading(false)
-        }).finally(setLoading(false))
-    }
-  }, [page, per_page]);
+  }, [name, page, per_page, category, colors, orientation, image_type, loading, response]);
 
   const hendleSubmitChange = ({ searchName, category, colors, orientation, image_type }) => {
     if (searchName === undefined) {
@@ -76,9 +68,9 @@ export default function App() {
         setLoading(true)
         setImageType(image_type)
       }
+      setPage(1);
     }
     else {
-      setSecondRespons(false)
       setPerPage(16)
       setName(searchName)
       setLoading(true)

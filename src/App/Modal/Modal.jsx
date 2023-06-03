@@ -13,7 +13,7 @@ export default function Modal({ children, hendlerCloseImage }) {
     useEffect(() => {
         window.addEventListener('keydown', hendlerShutDown);
         return () => window.removeEventListener('keydown', hendlerShutDown);
-    }, []);
+    });
 
     return createPortal(<Wraper onClick={hendlerShutDown}>
         <ModalBody>{children}</ModalBody>

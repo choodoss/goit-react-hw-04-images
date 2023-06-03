@@ -1,6 +1,6 @@
 import { BackgroundCont, ImagesGroup, Image } from './BackgroundContainer.styled';
 
-export default function ({ response }) {
+export default function BackgroundContainer({ response }) {
     if (response < 9) {
         return
     }
